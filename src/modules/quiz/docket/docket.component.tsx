@@ -1,5 +1,6 @@
 import { Tabs } from 'antd'
 import React, { FC } from 'react'
+import Player from '../../../components/player/player.component'
 
 import { DocketType } from '../../../types/qna.types'
 import styles from './docket.module.scss'
@@ -30,7 +31,7 @@ const RenderType: FC<{ docket: DocketType }> = ({ docket }) => {
       </div>
     )
   } else if (docket.type?.startsWith('video')) {
-    return <video src={docket.url} width="100%" height="500px" controls />
+    return <Player url={docket.url} type={docket.type} />
   }
   return null
 }

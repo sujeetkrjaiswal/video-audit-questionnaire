@@ -195,6 +195,7 @@ export const QuizContextProvider: FC<{
         afterClose={afterClosed}
         width="80%"
         bodyStyle={modalBodyStyle}
+        destroyOnClose
       >
         {modelConfig?.docket ? <Docket dockets={modelConfig.docket} /> : null}
       </Modal>
