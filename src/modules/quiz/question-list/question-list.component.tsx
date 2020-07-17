@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Col, Input, Row, Select } from 'antd'
+import { Alert, Button, Card, Col, Input, Modal, Row, Select } from 'antd'
 import React, {
   FC,
   useCallback,
@@ -8,6 +8,7 @@ import React, {
   useState,
 } from 'react'
 import QuizContext from '../quiz.context'
+import SubmissionView from '../submission-view/submission-view.component'
 import QuestionItem from './question-item.component'
 import styles from './question-list.module.scss'
 import { BooleanFilter, QuestionTypeSearch } from '../quiz.types'
@@ -26,6 +27,7 @@ const QuestionList: FC<QuestionListProps> = () => {
     answeredCount,
     questions,
   } = useContext(QuizContext)
+  const [showSubmitModal, setShowSubmitModal] = useState(false)
   const [query, setQuery] = useState('')
   const [filterTags, setFilterTags] = useState<string[]>([])
   const [filterCritical, setFilterCritical] = useState<BooleanFilter>(
@@ -52,6 +54,12 @@ const QuestionList: FC<QuestionListProps> = () => {
     },
     [setActiveQuestionId]
   )
+  const openModal = useCallback(() => {
+    setShowSubmitModal(true)
+  }, [])
+  const closeModal = useCallback(() => {
+    setShowSubmitModal(false)
+  }, [])
   const isNotSubmittable = answeredCount < questions.length
   return (
     <section className={styles.container}>
@@ -129,10 +137,21 @@ const QuestionList: FC<QuestionListProps> = () => {
           type={isNotSubmittable ? 'default' : 'primary'}
           block
           danger={isNotSubmittable}
+          onClick={openModal}
         >
           {isNotSubmittable ? 'Answered' : 'Submit'} ({answeredCount} /
           {questions.length})
         </Button>
+        <Modal
+          title="Submission"
+          onCancel={closeModal}
+          visible={showSubmitModal}
+          destroyOnClose
+          width="80%"
+          footer={null}
+        >
+          <SubmissionView />
+        </Modal>
       </div>
     </section>
   )

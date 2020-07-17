@@ -8,6 +8,7 @@
     "fuse.js": "^6.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-json-view": "^1.19.1",
     "react-router-dom": "^5.2.0",
     "react-split-pane": "^0.1.91",
     "uuid": "^8.2.0",

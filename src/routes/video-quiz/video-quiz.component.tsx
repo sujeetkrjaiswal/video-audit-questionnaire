@@ -110,7 +110,11 @@ const VideoQuiz: FC<{}> = () => {
           pane2Style={{ overflow: 'hidden' }}
         >
           <div data-vjs-player>
-            <video ref={videoRef} className="video-js vjs-big-play-centered" />
+            <video
+              ref={videoRef}
+              className="video-js vjs-big-play-centered"
+              crossOrigin="anonymous"
+            />
           </div>
           <div className={styles.questionContent}>
             <Question />

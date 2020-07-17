@@ -8,12 +8,7 @@ export function getScreenshot(video: HTMLVideoElement): string | null {
   if (context) {
     context.fillRect(0, 0, w, h)
     context.drawImage(video, 0, 0, w, h)
-    const dataUrl = canvas.toDataURL()
-    console.log(dataUrl)
-    console.log(canvas, video)
-    canvas.toBlob(function (blob) {
-      console.log('blob', blob)
-    })
+    const dataUrl = canvas.toDataURL('image/jpeg')
     return dataUrl
   }
   return null
