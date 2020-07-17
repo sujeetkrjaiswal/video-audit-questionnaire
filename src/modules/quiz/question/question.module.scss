@@ -1,0 +1,44 @@
+.questionContainer {
+  height: 100%;
+  overflow: auto;
+  padding: 0 12px;
+}
+.marginVertical {
+  margin: 12px 0;
+}
+.option {
+  display: block;
+  line-height: 2.5;
+}
+.label {
+  font-weight: 500;
+  display: inline-block;
+}
+.marginBottom {
+  margin-bottom: 0.25rem;
+}
+
+.textAreaAnswer {
+  border: 0
+}
+
+.headingWithExtras {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+.screenshotBtnContainer {
+  margin-top: 8px;
+  width: 100%;
+  justify-content: flex-end;
+}
+.submitBtnContainer {
+  text-align: center;
+}
+
+
+.questionNavContainer {
+  text-align: right;
+}
