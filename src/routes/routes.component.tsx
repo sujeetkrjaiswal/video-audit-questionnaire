@@ -11,7 +11,7 @@ const Routes: FC<{}> = () => {
   return (
     <Suspense fallback={<FullScreenLoader />}>
       <Switch>
-        <Route path="/" exact>
+        <Route path={process.env.PUBLIC_URL} exact>
           <QuizContextProvider videoUrl={mainSampleVideo} questions={questions}>
             <VideoQuiz />
           </QuizContextProvider>

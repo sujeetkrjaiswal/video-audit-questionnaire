@@ -26,6 +26,7 @@
     "@types/react-router-dom": "^5.1.5",
     "@types/uuid": "^8.0.0",
     "@types/video.js": "^7.3.10",
+    "del-cli": "^3.0.1",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "gh-pages": "^3.1.0",
@@ -37,7 +38,9 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "postbuild": "del ./build/sample/*.mp4",
     "test": "react-scripts test",
+    "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
@@ -59,5 +62,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "homepage": "/video-audit-questionnaire/"
 }
