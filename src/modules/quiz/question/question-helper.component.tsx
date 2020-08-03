@@ -1,5 +1,6 @@
 import { Button, Input, Tag } from 'antd'
 import React, { FC, useCallback, useContext } from 'react'
+import VideoContext from '../../video/video.context'
 import QuizContext from '../quiz.context'
 import styles from './question.module.scss'
 
@@ -12,7 +13,7 @@ export const formatVideoTime = (timeInSec = 0) => {
 }
 
 export const PlayerTime: FC<{ time?: number }> = ({ time }) => {
-  const { player } = useContext(QuizContext)
+  const { player } = useContext(VideoContext)
   const playerSeek = useCallback(
     (time?: number) => {
       if (player && time !== undefined) {

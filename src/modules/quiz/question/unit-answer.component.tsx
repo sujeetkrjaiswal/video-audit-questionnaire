@@ -5,14 +5,13 @@ import {
   RightOutlined,
   SaveOutlined,
 } from '@ant-design/icons/lib'
-import { Button, Col, Input, notification, Radio, Row, Space } from 'antd'
+import { Button, Col, Radio, Row, Space } from 'antd'
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react'
-import { v4 } from 'uuid'
 import { AnswerType, DocketType, QuestionType } from '../../../types/qna.types'
+import VideoContext from '../../video/video.context'
 import QuizContext from '../quiz.context'
 import { PlayerTime, TextAreaInput } from './question-helper.component'
 import styles from './question.module.scss'
-import { getScreenshot } from './screenshot.utility'
 
 export type UnitAnswerProps = {
   question: QuestionType
@@ -21,7 +20,6 @@ export type UnitAnswerProps = {
   onChange: (updatedAnswer: AnswerType) => void
 }
 const gutter: [number, number] = [16, 16]
-const { TextArea } = Input
 
 const UnitAnswer: FC<UnitAnswerProps> = ({
   question,
@@ -29,9 +27,10 @@ const UnitAnswer: FC<UnitAnswerProps> = ({
   onChange,
   questionIdx,
 }) => {
-  const { questions, setActiveQuestionId, setModelDocket, player } = useContext(
+  const { questions, setActiveQuestionId, setModelDocket } = useContext(
     QuizContext
   )
+  const { player, getScreenshot } = useContext(VideoContext)
   const [remark, setRemark] = useState(answer.remark)
   const [answerTxt, setAnswerTxt] = useState(answer.answer)
   const [media, setMedia] = useState<DocketType[] | undefined>(answer.media)
@@ -46,37 +45,15 @@ const UnitAnswer: FC<UnitAnswerProps> = ({
   }, [onChange, answer, remark, media, answerTxt, player])
 
   const saveScreenshot = useCallback(() => {
-    const container = player?.el()
-    const el = container?.querySelector('video')
-    if (!el) {
-      notification.error({ message: 'Could not find Video' })
-      return
-    }
-    if (player?.hasStarted()) {
-      const url = getScreenshot(el)
-      if (url === null) {
-        notification.warn({ message: 'Could not get Image Url' })
-        return
+    const newMedia = getScreenshot()
+    if (!newMedia) return
+    setMedia((prevState) => {
+      if (Array.isArray(prevState)) {
+        return [...prevState, newMedia]
       }
-      const newMedia: DocketType = {
-        id: v4(),
-        url,
-        type: 'image/jpeg',
-        title: `Screenshot at ${player?.currentTime()}`,
-      }
-      setMedia((prevState) => {
-        if (Array.isArray(prevState)) {
-          return [...prevState, newMedia]
-        }
-        return [newMedia]
-      })
-    } else {
-      notification.warn({
-        message: 'Can not take screenshot.',
-        description: 'You can not take screenshot before video has started',
-      })
-    }
-  }, [player])
+      return [newMedia]
+    })
+  }, [getScreenshot])
 
   const loadNext = useCallback(() => {
     if (questionIdx < questions.length) {

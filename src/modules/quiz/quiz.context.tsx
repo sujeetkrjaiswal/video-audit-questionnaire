@@ -1,13 +1,5 @@
 import { Modal } from 'antd'
-import React, {
-  createContext,
-  FC,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react'
-import { VideoJsPlayer } from 'video.js'
+import React, { createContext, FC, useCallback, useMemo, useState } from 'react'
 
 import { DocketType, QuestionType } from '../../types/qna.types'
 import Docket from './docket/docket.component'
@@ -22,13 +14,10 @@ import {
 
 export type QuizContextValue = {
   questions: QuestionType[]
-  videoUrl: string
   tags: string[]
   activeQuestionId: string
   setActiveQuestionId: (id: string) => void
   setModelDocket: (docket: DocketType[], title?: string) => void
-  player: VideoJsPlayer | null
-  setPlayer: React.Dispatch<React.SetStateAction<VideoJsPlayer | null>>
   answeredCount: number
   search(filter: SearchFilter): QuestionTypeSearch[]
   getQuestionById(id: string): QuestionTypeSearch | undefined
@@ -38,12 +27,9 @@ export type QuizContextValue = {
 
 const defaultValue: QuizContextValue = {
   questions: [],
-  videoUrl: '',
   tags: [],
   activeQuestionId: '',
-  player: null,
   answeredCount: 0,
-  setPlayer: () => undefined,
   setActiveQuestionId: () => undefined,
   setModelDocket: () => undefined,
   search: () => [],
@@ -58,8 +44,7 @@ const modalBodyStyle: React.CSSProperties = {
 }
 export const QuizContextProvider: FC<{
   questions: QuestionType[]
-  videoUrl: string
-}> = ({ children, questions, videoUrl }) => {
+}> = ({ children, questions }) => {
   // local states
   const [modelConfig, setModelConfig] = useState<{
     title: string
@@ -67,7 +52,6 @@ export const QuizContextProvider: FC<{
     visible: boolean
   } | null>(null)
   // states to pass
-  const [player, setPlayer] = useState<VideoJsPlayer | null>(null)
   const [activeQuestionId, setActiveQuestionId] = useState(questions[0].id)
   const [questionMap, setQuestionMap] = useState(generateQuestionMap(questions))
   const [fuse, tags] = useMemo(() => {
@@ -157,7 +141,6 @@ export const QuizContextProvider: FC<{
   const value = useMemo(
     (): QuizContextValue => ({
       tags,
-      videoUrl,
       questions,
       search,
       getQuestionsList,
@@ -166,13 +149,10 @@ export const QuizContextProvider: FC<{
       activeQuestionId,
       setActiveQuestionId,
       setModelDocket,
-      player,
-      setPlayer,
       answeredCount,
     }),
     [
       tags,
-      videoUrl,
       questions,
       search,
       getQuestionsList,
@@ -180,7 +160,6 @@ export const QuizContextProvider: FC<{
       updateQuestion,
       activeQuestionId,
       setModelDocket,
-      player,
       answeredCount,
     ]
   )

@@ -42,14 +42,12 @@ const getNewAnswer = (): AnswerType => ({
 })
 
 const { Paragraph } = Typography
-const { TextArea } = Input
 const QuestionComponent: FC<QuestionProps> = () => {
   const {
     getQuestionById,
     updateQuestion,
     activeQuestionId,
     setModelDocket,
-    player,
   } = useContext(QuizContext)
   const [question, setQuestion] = useState<QuestionTypeSearch | undefined>()
   const [answer, setAnswer] = useState(getNewAnswer())
