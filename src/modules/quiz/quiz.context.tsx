@@ -2,7 +2,7 @@ import { Modal } from 'antd'
 import React, { createContext, FC, useCallback, useMemo, useState } from 'react'
 
 import { DocketType, QuestionType } from '../../types/qna.types'
-import Docket from './docket/docket.component'
+import Docket from '../docket/docket-modal/docket.component'
 import { QuestionTypeSearch, SearchFilter } from './quiz.types'
 import {
   filterQuestionBasedOnQuery,
@@ -17,7 +17,6 @@ export type QuizContextValue = {
   tags: string[]
   activeQuestionId: string
   setActiveQuestionId: (id: string) => void
-  setModelDocket: (docket: DocketType[], title?: string) => void
   answeredCount: number
   search(filter: SearchFilter): QuestionTypeSearch[]
   getQuestionById(id: string): QuestionTypeSearch | undefined
@@ -31,7 +30,6 @@ const defaultValue: QuizContextValue = {
   activeQuestionId: '',
   answeredCount: 0,
   setActiveQuestionId: () => undefined,
-  setModelDocket: () => undefined,
   search: () => [],
   getQuestionById: () => undefined,
   updateQuestion: () => null,
@@ -39,18 +37,10 @@ const defaultValue: QuizContextValue = {
 }
 
 const QuizContext = createContext<QuizContextValue>(defaultValue)
-const modalBodyStyle: React.CSSProperties = {
-  padding: '0px 1rem 1rem',
-}
+
 export const QuizContextProvider: FC<{
   questions: QuestionType[]
 }> = ({ children, questions }) => {
-  // local states
-  const [modelConfig, setModelConfig] = useState<{
-    title: string
-    docket: DocketType[]
-    visible: boolean
-  } | null>(null)
   // states to pass
   const [activeQuestionId, setActiveQuestionId] = useState(questions[0].id)
   const [questionMap, setQuestionMap] = useState(generateQuestionMap(questions))
@@ -103,13 +93,6 @@ export const QuizContextProvider: FC<{
     [questions, questionMap, fuse]
   )
 
-  const setModelDocket = useCallback((docket, title = 'View') => {
-    setModelConfig({
-      title,
-      docket,
-      visible: true,
-    })
-  }, [])
   const answeredCount = useMemo(() => {
     return questions.reduce((total, question) => {
       const withAnswer = questionMap.get(question.id)
@@ -130,13 +113,6 @@ export const QuizContextProvider: FC<{
       return total
     }, 0)
   }, [questions, questionMap])
-  // local methods
-  const closeModal = useCallback(() => {
-    setModelConfig((pre) => (pre ? { ...pre, visible: false } : null))
-  }, [])
-  const afterClosed = useCallback(() => {
-    setModelConfig(null)
-  }, [])
 
   const value = useMemo(
     (): QuizContextValue => ({
@@ -148,7 +124,6 @@ export const QuizContextProvider: FC<{
       updateQuestion,
       activeQuestionId,
       setActiveQuestionId,
-      setModelDocket,
       answeredCount,
     }),
     [
@@ -159,27 +134,10 @@ export const QuizContextProvider: FC<{
       getQuestionById,
       updateQuestion,
       activeQuestionId,
-      setModelDocket,
       answeredCount,
     ]
   )
-  return (
-    <QuizContext.Provider value={value}>
-      {children}
-      <Modal
-        title={modelConfig?.title}
-        visible={modelConfig?.visible}
-        footer={null}
-        onCancel={closeModal}
-        afterClose={afterClosed}
-        width="80%"
-        bodyStyle={modalBodyStyle}
-        destroyOnClose
-      >
-        {modelConfig?.docket ? <Docket dockets={modelConfig.docket} /> : null}
-      </Modal>
-    </QuizContext.Provider>
-  )
+  return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>
 }
 
 export default QuizContext

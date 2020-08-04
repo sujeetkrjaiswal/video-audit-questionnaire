@@ -25,6 +25,7 @@ import React, {
 } from 'react'
 import { v4 } from 'uuid'
 import { AnswerType } from '../../../types/qna.types'
+import DocketContext from '../../docket/docket.context'
 import QuizContext from '../quiz.context'
 import { QuestionTypeSearch } from '../quiz.types'
 import { PlayerTime, Tags, TextAreaRead } from './question-helper.component'
@@ -43,12 +44,10 @@ const getNewAnswer = (): AnswerType => ({
 
 const { Paragraph } = Typography
 const QuestionComponent: FC<QuestionProps> = () => {
-  const {
-    getQuestionById,
-    updateQuestion,
-    activeQuestionId,
-    setModelDocket,
-  } = useContext(QuizContext)
+  const { getQuestionById, updateQuestion, activeQuestionId } = useContext(
+    QuizContext
+  )
+  const { setModelDocket } = useContext(DocketContext)
   const [question, setQuestion] = useState<QuestionTypeSearch | undefined>()
   const [answer, setAnswer] = useState(getNewAnswer())
 

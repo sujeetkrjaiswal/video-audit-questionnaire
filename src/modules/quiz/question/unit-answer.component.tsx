@@ -8,6 +8,7 @@ import {
 import { Button, Col, Radio, Row, Space } from 'antd'
 import React, { FC, useCallback, useContext, useEffect, useState } from 'react'
 import { AnswerType, DocketType, QuestionType } from '../../../types/qna.types'
+import DocketContext from '../../docket/docket.context'
 import VideoContext from '../../video/video.context'
 import QuizContext from '../quiz.context'
 import { PlayerTime, TextAreaInput } from './question-helper.component'
@@ -27,9 +28,8 @@ const UnitAnswer: FC<UnitAnswerProps> = ({
   onChange,
   questionIdx,
 }) => {
-  const { questions, setActiveQuestionId, setModelDocket } = useContext(
-    QuizContext
-  )
+  const { questions, setActiveQuestionId } = useContext(QuizContext)
+  const { setModelDocket } = useContext(DocketContext)
   const { player, getScreenshot } = useContext(VideoContext)
   const [remark, setRemark] = useState(answer.remark)
   const [answerTxt, setAnswerTxt] = useState(answer.answer)
@@ -49,7 +49,7 @@ const UnitAnswer: FC<UnitAnswerProps> = ({
     if (!newMedia) return
     setMedia((prevState) => {
       if (Array.isArray(prevState)) {
-        return [...prevState, newMedia]
+        return [newMedia, ...prevState]
       }
       return [newMedia]
     })
@@ -106,29 +106,15 @@ const UnitAnswer: FC<UnitAnswerProps> = ({
               </div>
             </div>
           ) : null}
-        </Col>
-        <Col sm={24} md={12}>
           <TextAreaInput
             value={remark}
+            rows={1}
             label="Remarks"
             placeholder="Enter additional remarks here ..."
             setValue={setRemark}
-            extra={
-              question.docket?.length ? (
-                <Button
-                  type="link"
-                  icon={<FileOutlined />}
-                  size="small"
-                  onClick={() =>
-                    question.docket &&
-                    setModelDocket(question.docket, 'View Dockets')
-                  }
-                >
-                  View Dockets ({question.docket.length})
-                </Button>
-              ) : null
-            }
           />
+        </Col>
+        <Col sm={24} md={12}>
           <Space className={styles.screenshotBtnContainer}>
             <Button
               type="primary"
@@ -136,23 +122,38 @@ const UnitAnswer: FC<UnitAnswerProps> = ({
               icon={<CameraOutlined />}
               size="small"
               onClick={saveScreenshot}
-              // disabled={!player?.hasStarted()}
             >
               Attach Screenshot
             </Button>
-            <Button
-              type="primary"
-              ghost
-              icon={<CameraOutlined />}
-              size="small"
-              disabled={!media?.length}
-              onClick={() =>
-                media && setModelDocket(media, 'View Current Screenshot')
-              }
-            >
-              View Screenshot ({media?.length || 0})
-            </Button>
+            {question && question.docket ? (
+              <Button
+                type="primary"
+                icon={<FileOutlined />}
+                size="small"
+                onClick={() =>
+                  question.docket &&
+                  setModelDocket(question.docket, 'View Dockets')
+                }
+              >
+                View Dockets ({question.docket.length})
+              </Button>
+            ) : null}
           </Space>
+
+          <div className={styles.imageContainer}>
+            {/*<div className={styles.attachScreenshotBtn}>Attach Screenshot</div>*/}
+            {media?.map((docket) => (
+              <div>
+                <img
+                  src={docket.url}
+                  className={styles.image}
+                  onClick={() =>
+                    setModelDocket([docket], 'View Current Screenshot')
+                  }
+                />
+              </div>
+            ))}
+          </div>
         </Col>
       </Row>
       <Row>

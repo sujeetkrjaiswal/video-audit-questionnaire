@@ -34,6 +34,8 @@ type Setter<T> = React.Dispatch<React.SetStateAction<T>>
 export type VideoContextValueType = {
   videoUrl: string
   setCurrentVideoRef: Setter<HTMLVideoElement | null>
+  setGallery: Setter<DocketType[]>
+  gallery: DocketType[]
   updateMarkers: (time: number[]) => void
   player?: VideoJsPlayer | null
   getScreenshot: () => DocketType | null
@@ -43,6 +45,8 @@ export type VideoContextValueType = {
 }
 const defaultValue: VideoContextValueType = {
   videoUrl: '',
+  gallery: [],
+  setGallery: () => null,
   setCurrentVideoRef: () => {},
   updateMarkers: () => {},
   getScreenshot: () => null,
@@ -125,6 +129,8 @@ export const VideoContextProvider: FC<{ videoUrl: string }> = ({
   const value: VideoContextValueType = useMemo(
     (): VideoContextValueType => ({
       videoUrl,
+      gallery,
+      setGallery,
       player,
       updateMarkers,
       setCurrentVideoRef,
@@ -137,6 +143,7 @@ export const VideoContextProvider: FC<{ videoUrl: string }> = ({
       analyserFrequency,
       analyserWaveForm,
       audioContext,
+      gallery,
       getScreenshot,
       player,
       updateMarkers,

@@ -11,6 +11,8 @@ export function drawFrequencyGraph(
     requestAnimationFrame(updateFrequencyGraphLoop)
     analyser.getByteFrequencyData(dataArray)
     const canvasRect = canvas.getBoundingClientRect()
+    canvas.width = canvasRect.width
+    canvas.height = canvasRect.height
     updateFrequencyGraph(ctx, canvasRect.width, canvasRect.height, dataArray)
   }
   updateFrequencyGraphLoop()

@@ -11,6 +11,8 @@ export function drawWaveForm(
     requestAnimationFrame(updateWaveformLoop)
     analyser.getByteTimeDomainData(dataArray)
     const canvasRect = canvas.getBoundingClientRect()
+    canvas.width = canvasRect.width
+    canvas.height = canvasRect.height
     updateWaveform(ctx, canvasRect.width, canvasRect.height, dataArray)
   }
   updateWaveformLoop()

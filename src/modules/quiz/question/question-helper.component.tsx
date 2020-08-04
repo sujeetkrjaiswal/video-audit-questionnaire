@@ -39,12 +39,14 @@ export const TextAreaInput: FC<{
   value?: string
   setValue: (value: string) => void
   extra?: JSX.Element | null
+  rows?: number
 }> = ({
   value,
   setValue,
   label,
   extra,
   placeholder = 'Enter your response here',
+  rows = 4,
 }) => {
   const onChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -61,7 +63,7 @@ export const TextAreaInput: FC<{
         {extra}
       </div>
       <TextArea
-        rows={4}
+        rows={rows}
         value={value}
         placeholder={placeholder}
         onChange={onChange}

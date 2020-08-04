@@ -1,7 +1,7 @@
 import { VideoJsPlayer } from 'video.js'
 import { getRMS, getRMSForNums } from '../../analyser.utility'
 
-export type OverallGraphData = {
+type OverallGraphData = {
   time: number
   rms: number
 }
@@ -42,6 +42,8 @@ export function drawOverallGraph(
     if (!ctx || !player) return
     requestAnimationFrame(updateWaveformLoop)
     const canvasRect = canvas.getBoundingClientRect()
+    canvas.width = canvasRect.width
+    canvas.height = canvasRect.height
     updateWaveform(ctx, canvasRect.width, canvasRect.height, dataArray, player)
   }
   updateWaveformLoop()
@@ -57,6 +59,7 @@ function updateWaveform(
   dataArray: number[],
   player: VideoJsPlayer
 ) {
+  console.log(`width: ${WIDTH}, height: ${HEIGHT}`)
   const currentTime = Math.floor(player.currentTime() || 0)
   canvasCtx.fillStyle = 'rgb(200, 200, 200)'
   canvasCtx.fillRect(0, 0, WIDTH, HEIGHT)

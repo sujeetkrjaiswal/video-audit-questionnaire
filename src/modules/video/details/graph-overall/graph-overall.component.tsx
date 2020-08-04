@@ -9,11 +9,7 @@ import React, {
 } from 'react'
 import VideoContext from '../../video.context'
 import styles from '../details.module.scss'
-import {
-  drawOverallGraph,
-  getOverallData,
-  OverallGraphData,
-} from './graph-overall-utility'
+import { drawOverallGraph, getOverallData } from './graph-overall-utility'
 
 const FullAudioAnalyserGraph: FC<{}> = () => {
   const { videoUrl, player } = useContext(VideoContext)

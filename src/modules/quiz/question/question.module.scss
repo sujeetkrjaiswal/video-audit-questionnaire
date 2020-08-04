@@ -42,3 +42,23 @@
 .questionNavContainer {
   text-align: right;
 }
+
+
+// for screenshots
+.attachScreenshotBtn {
+  text-align: center;
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.imageContainer {
+  margin: 0.5rem 0;
+  display: grid;
+  grid-gap: 0.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+}
+.image {
+  width: 100%;
+}
